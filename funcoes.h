@@ -29,7 +29,7 @@ void salvaMsg(char *nomeMsg, char *mensagem);
 
 void escondeChar(char caractere, pixel** pixelMap, int largura, int *i, int *j);
 
-char descobreChar(pixel** pixelMap, int largura, int *i, int *j);
+char descobreChar(pixel** pixelMap, int largura, int i, int j);
 
 int escondeMsgPPM(char *mensagem, int tamanhoDaMsg, imgPPM *imagemLida);
 

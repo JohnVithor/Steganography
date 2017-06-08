@@ -23,12 +23,13 @@ if (strcmp(argv[5], "ppm") == 0){
 	if (escondeMsgPPM(msgLida, tamanhoDaMsg, &imagemLida)){
 		printf("Imagem muito pequena para esconder essa mensagem.\n");
 	}
+	salvaImgPPM("Saida.ppm", &imagemLida);
 	char msgDesc[] = "";
 	if (descobreMsgPPM(msgDesc, &imagemLida)){
 		printf("Imagem muito pequena para esconder essa mensagem.\n");
 	}
 	salvaMsg("Saida.txt",msgDesc);
-	salvaImgPPM("Saida.ppm", &imagemLida);
+	//salvaImgPPM("Saida.ppm", &imagemLida);
 }
 if (strcmp(argv[5], "bmp") == 0){
 	imgBMP imagemLida;
