@@ -4,7 +4,7 @@ CFLAGS = -Wall -ansi -pedantic -std=c11 -g
 OBJS = abrirSalvar.o steg.o escDes.o
 
 $(PROG): $(OBJS)
-	$(CC) -o $(PROG) $(OBJS)
+	$(CC) -o $(PROG) $(OBJS) -lm
 
 abrirSalvar.o: abrirSalvar.c
 	$(CC) $(CFLAGS) -c abrirSalvar.c

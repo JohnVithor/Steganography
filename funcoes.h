@@ -27,8 +27,12 @@ char* abreMsg(char *nomeMsg, unsigned long *tamanhoMsg);
 
 void salvaMsg(char *nomeMsg, char *mensagem);
 
-int escondeMsg(char *mensagem, int tamanhoDaMsg, imgPPM *imagemLida);
+void escondeChar(char caractere, pixel** pixelMap, int largura, int *i, int *j);
 
-char* descobreMsg(imgPPM *imagemLida);
+char descobreChar(pixel** pixelMap, int largura, int *i, int *j);
+
+int escondeMsgPPM(char *mensagem, int tamanhoDaMsg, imgPPM *imagemLida);
+
+int descobreMsgPPM(char *mensagem, imgPPM *imagemLida);
 
 #endif

@@ -16,11 +16,18 @@ int main(int argc, char** argv){
 	unsigned long tamanhoDaMsg;
 	
 	msgLida = abreMsg(argv[3], &tamanhoDaMsg);
-	salvaMsg("Saida.txt",msgLida);
 
 if (strcmp(argv[5], "ppm") == 0){
 	imgPPM imagemLida;
 	abreImgPPM(argv[6], &imagemLida);
+	if (escondeMsgPPM(msgLida, tamanhoDaMsg, &imagemLida)){
+		printf("Imagem muito pequena para esconder essa mensagem.\n");
+	}
+	char msgDesc[] = "";
+	if (descobreMsgPPM(msgDesc, &imagemLida)){
+		printf("Imagem muito pequena para esconder essa mensagem.\n");
+	}
+	salvaMsg("Saida.txt",msgDesc);
 	salvaImgPPM("Saida.ppm", &imagemLida);
 }
 if (strcmp(argv[5], "bmp") == 0){
