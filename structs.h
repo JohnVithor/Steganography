@@ -48,12 +48,14 @@ typedef struct {
 	unsigned int biClrImportant;
 }infoHeaderBMP;
 
+/*
 typedef struct {
 	unsigned char B;
 	unsigned char G;
 	unsigned char R;
 	//unsigned char Reserved;
 }RGBSquad;
+*/
 
 typedef struct {
 	unsigned char P1;
@@ -69,7 +71,7 @@ typedef struct {
 typedef struct {
 	fileHeaderBMP header;
 	infoBMP info;
-	RGBSquad **pixelMap;
+	pixel **pixelMap;
 	pading *padRow;
 }imgBMP;
 

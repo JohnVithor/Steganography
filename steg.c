@@ -23,20 +23,31 @@ if (strcmp(argv[5], "ppm") == 0){
 	if (escondeMsgPPM(msgLida, tamanhoDaMsg, &imagemLida)){
 		printf("Imagem muito pequena para esconder essa mensagem.\n");
 	}
+
 	salvaImgPPM("Saida.ppm", &imagemLida);
-	char msgDesc[] = "";
+	char *msgDesc;
+	msgDesc = calloc(0 , sizeof(char));
+
 	if (descobreMsgPPM(msgDesc, &imagemLida)){
-		printf("Imagem muito pequena para esconder essa mensagem.\n");
+		printf("Não foi encontrado um fim de mensagem, muito provavel que não exista mensagem escondida nesta imagem\n");
 	}
 	salvaMsg("Saida.txt",msgDesc);
-	//salvaImgPPM("Saida.ppm", &imagemLida);
 }
 if (strcmp(argv[5], "bmp") == 0){
 	imgBMP imagemLida;
 	abreImgBMP(argv[6], &imagemLida);
-	salvaImgBMP("Saida.bmp", &imagemLida);
-}
+	if (escondeMsgBMP(msgLida, tamanhoDaMsg, &imagemLida)){
+		printf("Imagem muito pequena para esconder essa mensagem.\n");
+	}
 
+	salvaImgBMP("Saida.bmp", &imagemLida);
+	char msgDesc[] = "";
+
+	if (descobreMsgBMP(msgDesc, &imagemLida)){
+		printf("Não foi encontrado um fim de mensagem, muito provavel que não exista mensagem escondida nesta imagem\n");
+	}
+	salvaMsg("Saida.txt",msgDesc);
+}
 	free(msgLida);
 	return 0;
 }

@@ -7,6 +7,10 @@ void abreImgPPM(char *nomeImg, imgPPM *imagemLida);
 
 void salvaImgPPM(char *nomeImg, imgPPM *imagemLida);
 
+int escondeMsgPPM(char *mensagem, int tamanhoDaMsg, imgPPM *imagemLida);
+
+int descobreMsgPPM(char *mensagem, imgPPM *imagemLida);
+
 /////////////////////////////////////////////////
 
 void lerHeaderBMP(imgBMP *imagemLida, FILE* arqEntrada);
@@ -21,6 +25,10 @@ void abreImgBMP(char *nomeImg, imgBMP *imagemLida);
 
 void salvaImgBMP(char *nomeImg, imgBMP *imagemLida);
 
+int escondeMsgBMP(char *mensagem, int tamanhoDaMsg, imgBMP *imagemLida);
+
+int descobreMsgBMP(char *mensagem, imgBMP *imagemLida);
+
 /////////////////////////////////////////////////
 
 char* abreMsg(char *nomeMsg, unsigned long *tamanhoMsg);
@@ -32,9 +40,5 @@ void escondeChar(char caractere, pixel** pixelMap, int largura, int *i, int *j);
 char descobreChar(pixel** pixelMap, int largura, int i, int j);
 
 void adicionaChar(char *mensagem, char c);
-
-int escondeMsgPPM(char *mensagem, int tamanhoDaMsg, imgPPM *imagemLida);
-
-int descobreMsgPPM(char *mensagem, imgPPM *imagemLida);
 
 #endif
