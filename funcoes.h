@@ -31,6 +31,8 @@ void escondeChar(char caractere, pixel** pixelMap, int largura, int *i, int *j);
 
 char descobreChar(pixel** pixelMap, int largura, int i, int j);
 
+void adicionaChar(char *mensagem, char c);
+
 int escondeMsgPPM(char *mensagem, int tamanhoDaMsg, imgPPM *imagemLida);
 
 int descobreMsgPPM(char *mensagem, imgPPM *imagemLida);

@@ -90,17 +90,27 @@ int escondeMsgPPM(char *mensagem, int tamanhoDaMsg, imgPPM *imagemLida){
 	return 0;
 }
 
+void adicionaChar(char *mensagem, char c){
+	char aux[1];
+	aux[0] = c;
+	strcat(mensagem,aux);
+	return;
+}
+
 int descobreMsgPPM(char *mensagem, imgPPM *imagemLida){
 	int i = 0, j = 0, k = 0;
-	char caractere[] = "";
+	char caractere;
 	//printf(" 'i' fora %d\n", i);
+	printf("inicial %s\n", mensagem);
 	do{
-		caractere[k] = descobreChar(imagemLida->pixelMap, imagemLida->largura, i, j);
+		caractere = descobreChar(imagemLida->pixelMap, imagemLida->largura, i, j);
+		printf("%c\n", caractere);
 		j += 4;
 		if (j >= imagemLida->largura){
 		 	++i;
 		 } 
-		strcat(mensagem, caractere);
+		adicionaChar(mensagem,caractere);
+		//printf("in %s\n", mensagem);
 		//printf(" 'i' fora %d\n", i);
 		
 		if (i == imagemLida->altura-1 && j == imagemLida->largura){
@@ -108,7 +118,8 @@ int descobreMsgPPM(char *mensagem, imgPPM *imagemLida){
 		}
 
 		++k;
-		//printf("k atual = %d\n",k);
-	}while(caractere[k-1] != '\0');
+		printf("k atual = %d\n",k);
+	}while(caractere != '\0');
+	printf("%s\n", mensagem);
 	return 0;
 }
