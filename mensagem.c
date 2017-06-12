@@ -43,30 +43,49 @@ void salvaMsg(char *nomeMsg, char *mensagem){
 }
 
 void escondeChar(unsigned char caractere, pixel** pixelMap, int largura, int *i, int *j){
+	// Inicio um laço que percorre 4 pixels
 	for (int b = 0; b < 4; ++b){
-		if ((caractere % 2) == 1){
-			if ((pixelMap[*i][*j].R % 2) == 0){
+		// Se o LSB do caractere atual for 1
+		if (caractere & 1){
+			// Se o LSB do Red no pixel indicado for 0
+			if (!(pixelMap[*i][*j].R & 1)){
+				// Troco seu valor para 1
 				pixelMap[*i][*j].R ^= 1;
 			}
+		// Se o LSB do caractere atual for 0
 		} else {
-			if ((pixelMap[*i][*j].R % 2) == 1){
+			// Se o LSB do Red no pixel indicado for 1
+			if (pixelMap[*i][*j].R & 1){
+				// Troco seu valor para 0
 				pixelMap[*i][*j].R &= 254;
 			}
 		}
-		caractere /= 2;
-		if ((caractere % 2)){
-			if ((pixelMap[*i][*j].G % 2) == 0){
+		// Movo os bits do caractere para a mudar o LSB
+		caractere >>=1;
+		// Se o LSB do caractere atual for 1
+		if (caractere & 1){
+			// Se o LSB do Green no pixel indicado for 0
+			if (!(pixelMap[*i][*j].G & 1)){
+				// Troco seu valor para 1
 				pixelMap[*i][*j].G ^= 1;
 			}
+		// Se o LSB do caractere atual for 0
 		} else {
-			if ((pixelMap[*i][*j].G % 2) == 1){
+			// Se o LSB do Green no pixel indicado for 1
+			if (pixelMap[*i][*j].G & 1){
+				// Troco seu valor para 0
 				pixelMap[*i][*j].G &= 254;
 			}
 		}
-		caractere /= 2;
+		// Movo os bits do caractere para a mudar o LSB
+		caractere >>=1;
+		// Incremento o indice j para ir para o proximo pixel
 		++(*j);
+		// Se o indice j for igual a largura da imagem
 		if (*j == largura){
+			// incremento o indice i
 			++(*i);
+			// reinicio o indice j
 			*j = 0;
 		}
 	}
@@ -77,14 +96,17 @@ unsigned char descobreChar(pixel** pixelMap, int largura, int *i, int *j){
 	// Crio um caractere 
 	unsigned char caractere = 0;
 	for (int b = 0; b < 8; b += 2){
-		// Recupero o LSB do pixel indicado e o multiplico pela devida potencia de 2
+		// Recupero o LSB do pixel indicado e o multiplico pela devida potência de 2
 		// Somo o resultado no caractere previamente criado
 		caractere += (pixelMap[*i][*j].R % 2) * pow(2,b);
 		caractere += (pixelMap[*i][*j].G % 2) * pow(2,b+1);
-		// Incremento o indice
+		// Incremento o indice j
 		++(*j);
+		// Se o indice j for igual a largura da imagem
 		if (*j == largura){
+			// incremento o indice i
 			++(*i);
+			// reinicio o indice j
 			*j = 0;
 		}
 	}
