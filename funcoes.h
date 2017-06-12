@@ -35,10 +35,10 @@ char* abreMsg(char *nomeMsg, unsigned long *tamanhoMsg);
 
 void salvaMsg(char *nomeMsg, char *mensagem);
 
-void escondeChar(char caractere, pixel** pixelMap, int largura, int *i, int *j);
+void escondeChar(unsigned char char_esconder, pixel** pixelMap, int largura, int *i, int *j);
 
-char descobreChar(pixel** pixelMap, int largura, int i, int j);
+unsigned char descobreChar(pixel** pixelMap, int largura, int *i, int *j);
 
-void adicionaChar(char *mensagem, char c);
+void adicionaChar(char *mensagem,int tamanhoMsg ,unsigned char c);
 
 #endif

@@ -1,0 +1,6 @@
+Testando mensagens normais com
+duas linhas,
+tres,
+quatro,
+tabulação	na	quinta...
+sexta?

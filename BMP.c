@@ -1,10 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "funcoes.h"
 #include "structs.h"
 
 void lerHeaderBMP(imgBMP *imagemLida, FILE* arqEntrada){
+	// Lê a primeira parte do cabeçalho
 	fread(&imagemLida->header.fileType, sizeof(unsigned short int), 1, arqEntrada);
 	fread(&imagemLida->header.fileSize, sizeof(unsigned int), 1, arqEntrada);
 	fread(&imagemLida->header.fileReserved1, sizeof(unsigned short int), 1, arqEntrada);
@@ -14,6 +16,7 @@ void lerHeaderBMP(imgBMP *imagemLida, FILE* arqEntrada){
 }
 
 void lerInfoBMP(imgBMP *imagemLida, FILE* arqEntrada){
+	// Lê a segunda parte do cabeçalho
 	fread(&imagemLida->info.header.biSize, sizeof(unsigned int), 1, arqEntrada);
 	fread(&imagemLida->info.header.biWidth, sizeof(unsigned int), 1, arqEntrada);
 	fread(&imagemLida->info.header.biHeight, sizeof(unsigned int), 1, arqEntrada);
@@ -29,6 +32,7 @@ void lerInfoBMP(imgBMP *imagemLida, FILE* arqEntrada){
 }
 
 void escreverHeaderBMP(imgBMP *imagemLida, FILE* arqSaida){
+	// Escreve a primeira parte do cabeçalho
 	fwrite(&imagemLida->header.fileType, sizeof(unsigned short int), 1, arqSaida);
 	fwrite(&imagemLida->header.fileSize, sizeof(unsigned int), 1, arqSaida);
 	fwrite(&imagemLida->header.fileReserved1, sizeof(unsigned short int), 1, arqSaida);
@@ -38,6 +42,7 @@ void escreverHeaderBMP(imgBMP *imagemLida, FILE* arqSaida){
 }
 
 void escreverInfoBMP(imgBMP *imagemLida, FILE* arqSaida){
+	// Escreve a segunda parte do cabeçalho
 	fwrite(&imagemLida->info.header.biSize, sizeof(unsigned int), 1, arqSaida);
 	fwrite(&imagemLida->info.header.biWidth, sizeof(unsigned int), 1, arqSaida);
 	fwrite(&imagemLida->info.header.biHeight, sizeof(unsigned int), 1, arqSaida);
@@ -56,7 +61,7 @@ void abreImgBMP(char *nomeImg, imgBMP *imagemLida){
 	FILE* arqEntrada;
 
 	if((arqEntrada = fopen(nomeImg, "rb")) == NULL){
-		printf("Impossível de abrir o arquivo.\n");
+		fprintf(stderr, "Impossível de abrir o arquivo.\n");
 		exit(1);
 	}
 
@@ -64,13 +69,15 @@ void abreImgBMP(char *nomeImg, imgBMP *imagemLida){
 		
 	lerInfoBMP(imagemLida, arqEntrada);
 	
+	// Aloca a matriz de pixel com base nas informações lidas no cabeçalho
 	imagemLida->pixelMap = (pixel **) malloc (imagemLida->info.header.biHeight * sizeof(pixel *));
 	for (int i = 0; i < imagemLida->info.header.biHeight; i++ ){
 		imagemLida->pixelMap[i] = (pixel *) malloc (imagemLida->info.header.biWidth * sizeof(pixel));
 	}
-
+	// Aloca o 'pading' que informa o fim de linha no BMP
 	imagemLida->padRow = (pading *) malloc (imagemLida->info.header.biWidth * sizeof(pading));
 
+	// Inicia a leitura dos pixels
 	for (int i = 0; i < imagemLida->info.header.biHeight; ++i){
 		for (int j = 0; j < imagemLida->info.header.biWidth; ++j){
 			imagemLida->pixelMap[i][j].B = fgetc(arqEntrada);
@@ -88,7 +95,7 @@ void abreImgBMP(char *nomeImg, imgBMP *imagemLida){
 void salvaImgBMP(char *nomeImg, imgBMP *imagemLida){
 	FILE *arqSaida;
 	if((arqSaida = fopen(nomeImg, "wb")) == NULL){
-		printf("Impossível de salvar o arquivo.\n");
+		fprintf(stderr, "Impossível de salvar o arquivo.\n");
 		exit(1);
 	}
 
@@ -96,6 +103,7 @@ void salvaImgBMP(char *nomeImg, imgBMP *imagemLida){
 		
 	escreverInfoBMP(imagemLida, arqSaida);
 
+	// Escreve as informações de cada cor na matriz de pixels
 	for (int i = 0; i < imagemLida->info.header.biHeight; ++i){
 		for (int j = 0; j < imagemLida->info.header.biWidth; ++j){
 			putc(imagemLida->pixelMap[i][j].B, arqSaida);
@@ -110,32 +118,38 @@ void salvaImgBMP(char *nomeImg, imgBMP *imagemLida){
 }
 
 int escondeMsgBMP(char *mensagem, int tamanhoDaMsg, imgBMP *imagemLida){
+	// Crio dois indices para percorrer a matriz de pixels
 	int i = 0, j = 0;
+	// Verifico se a imagem é grande o suficiente para comportar a mensagem
 	if (tamanhoDaMsg >= imagemLida->info.header.biHeight * imagemLida->info.header.biWidth * 4){
 		return 1;
 	}
+	// Para cada caractere da mensagem eu chamo a função escondeChar()
 	for (int c = 0; c < tamanhoDaMsg; ++c){
-		escondeChar(mensagem[c], imagemLida->pixelMap, imagemLida->info.header.biWidth, &i, &j);
+		escondeChar((unsigned char) mensagem[c], imagemLida->pixelMap, imagemLida->info.header.biWidth, &i, &j);
 	}
-	char fim = '\0';
-	escondeChar(fim, imagemLida->pixelMap, imagemLida->info.header.biWidth, &i, &j);
+	// Escondo um caractere de fim de string para poder recuperar a mensagem depois
+	escondeChar('\0', imagemLida->pixelMap, imagemLida->info.header.biWidth, &i, &j);
 	return 0;
 }
 
 int descobreMsgBMP(char *mensagem, imgBMP *imagemLida){
-	int i = 0, j = 0, k = 0;
+	// Crio dois indices para percorrer a matriz de pixels
+	int i = 0, j = 0;
 	char caractere;
+	int tamanhoDaMsg = 1;
 	do{
-		caractere = descobreChar(imagemLida->pixelMap, imagemLida->info.header.biWidth, i, j);
-		j += 4;
-		if (j >= imagemLida->info.header.biWidth){
-		 	++i;
-		 } 
-		adicionaChar(mensagem,caractere);	
-		if (i == imagemLida->info.header.biHeight - 1 && j == imagemLida->info.header.biWidth){
+		// Um caractere previamente criado recebe o caractere recuperado da imagem
+		caractere = descobreChar(imagemLida->pixelMap, imagemLida->info.header.biWidth, &i, &j);
+		// Adiciono o caractere recuperado a uma string
+		adicionaChar(mensagem, tamanhoDaMsg, caractere);
+		// Incremento o tamanho da string
+		++tamanhoDaMsg;
+		// Verifica se já foram percorridos todos os pixels da imagem
+		if (i == imagemLida->info.header.biHeight - 1 && j >= imagemLida->info.header.biWidth){
 			return 1;
 		}
-		++k;
+	// Continua o laço de repetição enquanto não for encontrado um '\0' na imagem
 	}while(caractere != '\0');
 	return 0;
 }
