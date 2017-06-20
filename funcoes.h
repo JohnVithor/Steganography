@@ -9,7 +9,7 @@ void salvaImgPPM(char *nomeImg, imgPPM *imagemLida);
 
 int escondeMsgPPM(char *mensagem, int tamanhoDaMsg, imgPPM *imagemLida);
 
-int descobreMsgPPM(char *mensagem, imgPPM *imagemLida);
+int descobreMsgPPM(char saida, imgPPM *imagemLida, char *arquivoTexto);
 
 /////////////////////////////////////////////////
 
@@ -27,18 +27,16 @@ void salvaImgBMP(char *nomeImg, imgBMP *imagemLida);
 
 int escondeMsgBMP(char *mensagem, int tamanhoDaMsg, imgBMP *imagemLida);
 
-int descobreMsgBMP(char *mensagem, imgBMP *imagemLida);
+int descobreMsgBMP(char saida, imgBMP *imagemLida, char *arquivoTexto);
 
 /////////////////////////////////////////////////
 
 char* abreMsg(char *nomeMsg, unsigned long *tamanhoMsg);
 
-void salvaMsg(char *nomeMsg, char *mensagem);
+void salvaChar(FILE *arqSaida, char caractere);
 
 void escondeChar(unsigned char char_esconder, pixel** pixelMap, int largura, int *i, int *j);
 
 unsigned char descobreChar(pixel** pixelMap, int largura, int *i, int *j);
-
-void adicionaChar(char *mensagem,int tamanhoMsg ,unsigned char c);
 
 #endif

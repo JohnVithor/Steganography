@@ -12,7 +12,7 @@
 int main(int argc, char** argv){
 
 	int e_flag = 0, d_flag = 0, s_flag = 0;
-	char *msg = NULL, *formato = NULL, *imagem = NULL;
+	char *arquivoTexto = NULL, *formato = NULL, *imagem = NULL;
 	int c;
 	opterr = 0;
 
@@ -39,8 +39,8 @@ int main(int argc, char** argv){
 					fprintf(stderr, "Erro: Não é permitido o uso de '-i' e '-d' no mesmo comando\n");
 					return 1;
 				} else {
-					// msg recebe o nome do arquivo onde está a mensagem
-					msg = optarg;
+					// arquivoTexto recebe o nome do arquivo onde está a mensagem
+					arquivoTexto = optarg;
 				}
 				break;
 			case 'o':
@@ -51,8 +51,8 @@ int main(int argc, char** argv){
 					fprintf(stderr, "Erro: Não é permitido o uso de '-o' e '-s' no mesmo comando\n");
 					return 1;
 				} else {
-					// msg recebe o nome do arquivo onde está a mensagem
-					msg = optarg;
+					// arquivoTexto recebe o nome do arquivo onde está a mensagem
+					arquivoTexto = optarg;
 				}
 				break;
 			case 's':
@@ -87,12 +87,12 @@ int main(int argc, char** argv){
 		imagem = argv[optind];
 	}
 
-	if (e_flag){ // Caso a opção de 'Encode' seja selecionada
+	if (e_flag){// Caso a opção de 'Encode' seja selecionada
 		printf("Codificando mensagem...\n");
 		char *msgLida;
 		unsigned long tamanhoDaMsg;
 		// Leio o arquivo da mensagem e guardo seu conteudo na string msgLida
-		msgLida = abreMsg(msg, &tamanhoDaMsg);
+		msgLida = abreMsg(arquivoTexto, &tamanhoDaMsg);
 		// Caso o formato seja ppm
 		if (strcmp(formato, "ppm") == 0){
 			imgPPM imagemLida;
@@ -123,11 +123,11 @@ int main(int argc, char** argv){
 
 	if (d_flag){ // Caso a opção de 'Decode' seja selecionada
 		printf("Decodificando mensagem...\n");
-		char *msgDesc;
-		// Aloco um tamanho inicial para a mensagem a ser decodificada
-		if((msgDesc = malloc(1 * sizeof(char))) == NULL){
-			fprintf(stderr, "Erro durante a alocação da memória.\n");
-			return 1;
+		char saida;
+		if (s_flag){
+			saida = 's';
+		} else {
+			saida = 'o';
 		}
 		// Caso o formato seja ppm
 		if (strcmp(formato, "ppm") == 0){
@@ -135,20 +135,9 @@ int main(int argc, char** argv){
 			// Leio a imagem e a armazeno na struct 'imagemLida'
 			abreImgPPM(imagem, &imagemLida);
 			// Inicio o processo de recuperar a mensagem escondida
-			if (descobreMsgPPM(msgDesc, &imagemLida)){
+			if (descobreMsgPPM(saida, &imagemLida, arquivoTexto)){
 				fprintf(stderr, "Não foi encontrado um fim de mensagem.\n");
 				return 1;
-			}
-			if (s_flag){ // Se a opção de mostrar o conteúdo na tela foi selecionada
-				printf("Decodificação concluída!\n");
-				printf("Mensagem encontrada: \n");
-				// Imprimo a mensagem no stdout
-				printf("%s\n", msgDesc);
-			} else{
-				printf("Decodificação concluída!\n");
-				// Salvo a mensagem no arquivo indicado pela opção '-o'
-				salvaMsg(msg,msgDesc);	
-				printf("Mensagem salva em %s\n", msg);
 			}
 		}
 		// Caso o formato seja bmp
@@ -157,20 +146,9 @@ int main(int argc, char** argv){
 			// Leio a imagem e a armazeno na struct 'imagemLida'
 			abreImgBMP(imagem, &imagemLida);
 			// Inicio o processo de recuperar a mensagem escondida
-			if (descobreMsgBMP(msgDesc, &imagemLida)){
+			if (descobreMsgBMP(saida, &imagemLida, arquivoTexto)){
 				fprintf(stderr, "Não foi encontrado um fim de mensagem.\n");
 				return 1;
-			}
-			if (s_flag){ // Se a opção de mostrar o conteúdo na tela foi selecionada
-				printf("Decodificação concluída!\n");
-				printf("Mensagem encontrada: \n");
-				// Imprimo a mensagem no stdout
-				printf("%s\n", msgDesc);
-			} else{
-				printf("Decodificação concluída!\n");
-				// Salvo a mensagem no arquivo indicado pela opção '-o'
-				salvaMsg(msg,msgDesc);	
-				printf("Mensagem salva em %s\n", msg);
 			}
 		}
 	}

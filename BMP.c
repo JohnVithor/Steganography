@@ -133,23 +133,33 @@ int escondeMsgBMP(char *mensagem, int tamanhoDaMsg, imgBMP *imagemLida){
 	return 0;
 }
 
-int descobreMsgBMP(char *mensagem, imgBMP *imagemLida){
+int descobreMsgBMP(char saida, imgBMP *imagemLida, char *arquivoTexto){
 	// Crio dois indices para percorrer a matriz de pixels
 	int i = 0, j = 0;
 	char caractere;
-	int tamanhoDaMsg = 1;
-	do{
+	FILE *arqSaida;
+	if (saida == 'o'){
+		// Crio o arquivo onde a mensagem será salva
+		if((arqSaida = fopen(arquivoTexto, "w")) == NULL){
+			fprintf(stderr, "Impossível de salvar o arquivo.\n");
+			exit(1);
+		}
+		printf("Mensagem será salva no arquivo %s\n", arquivoTexto);
+	} else {
+		arqSaida = stdout;
+		printf("Mensagem salva impressa na tela:\n");
+	}
+	do {
 		// Um caractere previamente criado recebe o caractere recuperado da imagem
 		caractere = descobreChar(imagemLida->pixelMap, imagemLida->info.header.biWidth, &i, &j);
 		// Adiciono o caractere recuperado a uma string
-		adicionaChar(mensagem, tamanhoDaMsg, caractere);
-		// Incremento o tamanho da string
-		++tamanhoDaMsg;
+		salvaChar(arqSaida, caractere);
 		// Verifica se já foram percorridos todos os pixels da imagem
 		if (i == imagemLida->info.header.biHeight - 1 && j >= imagemLida->info.header.biWidth){
 			return 1;
 		}
 	// Continua o laço de repetição enquanto não for encontrado um '\0' na imagem
-	}while(caractere != '\0');
+	} while (caractere != '\0');
+	fclose(arqSaida);
 	return 0;
 }
