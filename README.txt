@@ -1,5 +1,3 @@
-# Esteganografia
-
 O que foi feito:
 	Criadas structs para armazenar os dados (cabeçalho e matriz de pixels) de cada tipo de imagem suportada (PPM e BMP);
 	Ler as imagens e armazenar seus dados nas devidas structs;

@@ -147,7 +147,7 @@ int descobreMsgBMP(char saida, imgBMP *imagemLida, char *arquivoTexto){
 		printf("Mensagem será salva no arquivo %s\n", arquivoTexto);
 	} else {
 		arqSaida = stdout;
-		printf("Mensagem salva impressa na tela:\n");
+		printf("Mensagem encontrada será impressa na tela\n");
 	}
 	do {
 		// Um caractere previamente criado recebe o caractere recuperado da imagem
