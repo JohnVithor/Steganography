@@ -1,6 +1,6 @@
 # Esteganografia
 
-O que foi feito:
+- O que foi feito:
 
 	Criadas structs para armazenar os dados (cabeçalho e matriz de pixels) de cada tipo de imagem suportada (PPM e BMP);
 	Ler as imagens e armazenar seus dados nas devidas structs;
@@ -11,16 +11,16 @@ O que foi feito:
 	Utilização da função getopt() para o processamento das opções do programa;
 	Criação do Makefile para facilitar a compilação do projeto;
 	
-O que não foi feito:
+- O que não foi feito:
 
 	Suporte para outros formatos de imagem;
 	Utilização de outras técnicas de esteganografia;
 
-O que seria feito diferente:
+- O que seria feito diferente:
 
 	Tentaria utilizar uma única função para codificar a mensagem em diferentes formatos;
 	Assim como uma única função para decodificar a mensagem escondida;
 	
-Como compilar o projeto:
+- Como compilar o projeto:
 
 	Utilização do comando 'make' no terminal do Linux;
