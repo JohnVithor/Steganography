@@ -53,7 +53,7 @@ typedef struct {
 	unsigned char B;
 	unsigned char G;
 	unsigned char R;
-	//unsigned char Reserved;
+	unsigned char Reserved;
 }RGBSquad;
 */
 

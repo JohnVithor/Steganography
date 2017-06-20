@@ -64,7 +64,7 @@ int escondeMsgPPM(char *mensagem, int tamanhoDaMsg, imgPPM *imagemLida){
 	// Crio dois indices para percorrer a matriz de pixels
 	int i = 0, j = 0;
 	// Verifico se a imagem é grande o suficiente para comportar a mensagem
-	if (tamanhoDaMsg >= imagemLida->altura * imagemLida->largura * 4){
+	if (tamanhoDaMsg >= (imagemLida->altura * imagemLida->largura / 4)){
 		return 1;
 	}
 	// Para cada caractere da mensagem eu chamo a função escondeChar()

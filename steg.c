@@ -139,7 +139,7 @@ int main(int argc, char** argv){
 				fprintf(stderr, "Não foi encontrado um fim de mensagem.\n");
 				return 1;
 			}
-			printf("Decodificação concluída.\n");
+			printf("Decodificação concluída!\n");
 		}
 		// Caso o formato seja bmp
 		if (strcmp(formato, "bmp") == 0){
@@ -151,7 +151,7 @@ int main(int argc, char** argv){
 				fprintf(stderr, "Não foi encontrado um fim de mensagem.\n");
 				return 1;
 			}
-			printf("Decodificação concluída.\n");
+			printf("Decodificação concluída!\n");
 		}
 	}
 	return 0;

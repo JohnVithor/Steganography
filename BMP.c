@@ -84,8 +84,9 @@ void abreImgBMP(char *nomeImg, imgBMP *imagemLida){
 			imagemLida->pixelMap[i][j].G = fgetc(arqEntrada);
 			imagemLida->pixelMap[i][j].R = fgetc(arqEntrada);
 		}
-		imagemLida->padRow[i].P1 = fgetc(arqEntrada);
-		imagemLida->padRow[i].P2 = fgetc(arqEntrada);
+		// Leio as informações do 'pading' ao final de cada linha
+		//imagemLida->padRow[i].P1 = fgetc(arqEntrada);
+		//imagemLida->padRow[i].P2 = fgetc(arqEntrada);
 	}
 
 	fclose(arqEntrada);
@@ -110,8 +111,8 @@ void salvaImgBMP(char *nomeImg, imgBMP *imagemLida){
 			putc(imagemLida->pixelMap[i][j].G, arqSaida);
 			putc(imagemLida->pixelMap[i][j].R, arqSaida);
 		}
-		putc(imagemLida->padRow[i].P1, arqSaida);
-		putc(imagemLida->padRow[i].P2, arqSaida);
+		//putc(imagemLida->padRow[i].P1, arqSaida);
+		//putc(imagemLida->padRow[i].P2, arqSaida);
 	}
 	fclose(arqSaida);
 	return;
@@ -121,7 +122,7 @@ int escondeMsgBMP(char *mensagem, int tamanhoDaMsg, imgBMP *imagemLida){
 	// Crio dois indices para percorrer a matriz de pixels
 	int i = 0, j = 0;
 	// Verifico se a imagem é grande o suficiente para comportar a mensagem
-	if (tamanhoDaMsg >= imagemLida->info.header.biHeight * imagemLida->info.header.biWidth * 4){
+	if (tamanhoDaMsg >= imagemLida->info.header.biHeight * imagemLida->info.header.biWidth / 4){
 		return 1;
 	}
 	// Para cada caractere da mensagem eu chamo a função escondeChar()
